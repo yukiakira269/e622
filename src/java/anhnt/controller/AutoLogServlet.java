@@ -23,9 +23,6 @@ import javax.servlet.RequestDispatcher;
  */
 public class AutoLogServlet extends HttpServlet {
 
-    private static final String LOGIN_PAGE = "login.html";
-    private static final String SEARCH_PAGE = "search.jsp";
-
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,10 +36,9 @@ public class AutoLogServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        boolean result = false;
-        String url = LOGIN_PAGE;
+        int result = -1;
+        String url = "LOGIN_PAGE";
         try {
-
             //1. Retrieve clients' cookies
             Cookie[] cookies = request.getCookies();
             //2. If the clients do have cookies
@@ -57,9 +53,17 @@ public class AutoLogServlet extends HttpServlet {
                 RegistrationDAO dao = new RegistrationDAO();
                 result = dao.checkLogin(userId, password);
             }//end if Cookies
-            if (result) {
-                url = SEARCH_PAGE;
+            //If the account is an adminstrative account, forward to account search page
+
+            if (result == 1) {
+                url = "SEARCH_PAGE";
+            } //If the account is a normal user account, forward to the gallery page
+            else if (result == 0) {
+                url = "GALLERY_PAGE";
+                //If this is the first login of the session (i.e no cookies is found),
+                //forward to login page
             }
+            //If the result is -1, meaning no account found, forward to the login page by default
         } catch (NamingException ex) {
             log("AutoLogServlet Naming: " + ex.getMessage());
 
@@ -68,6 +72,7 @@ public class AutoLogServlet extends HttpServlet {
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);
+//response.sendRedirect(url);
             out.close();
         }
     }

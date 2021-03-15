@@ -49,7 +49,7 @@ public class UpdateServlet extends HttpServlet {
             String urlRewrite = "search?txtSearch=" + lastSearchValue;
             System.out.println("Updated");
             response.sendRedirect(urlRewrite);
-            
+
         } catch (SQLException ex) {
             log("UpdateServlet SQL: " + ex.getMessage());
         } catch (NamingException ex) {

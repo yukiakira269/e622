@@ -86,7 +86,7 @@ public class RegistrationDAO implements Serializable {
         return fullname;
     }
 
-    public boolean checkLogin(String userId, String password)
+    public int checkLogin(String userId, String password)
             throws NamingException, SQLException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -105,7 +105,8 @@ public class RegistrationDAO implements Serializable {
                 //3. Execute query and store in result set
                 rs = stm.executeQuery();
                 if (rs.next()) {
-                    return true;
+                    System.out.println("EXIST!!!");
+                    return rs.getInt(4);
                 }
             }
         } finally {
@@ -116,8 +117,8 @@ public class RegistrationDAO implements Serializable {
                 con.close();
             }
         }
-
-        return false;
+        System.out.println("NONE");
+        return -1;
     }
 
     public boolean registerAccount(String userId, String password, String fullname,

@@ -105,8 +105,9 @@ public class FilterController implements Filter {
             throws IOException, ServletException {
         //1. Cast to http to obtain better support from the Container
         HttpServletRequest req = (HttpServletRequest) request;
-        //Obtain URI until the ? mark
+        //Obtain URI without the query String
         String uri = req.getRequestURI();
+        System.out.println(uri);
         String url = null;
         ServletContext ctx = req.getServletContext();
         Map<String, String> dirMap = new HashMap<String, String>();
@@ -118,7 +119,6 @@ public class FilterController implements Filter {
                 if (dirMap != null) {
                     //4. Iterate through the map to select the correct resource
                     uri = uri.substring(uri.lastIndexOf("/") + 1);
-                    System.out.println(uri);
                     for (Entry entry : dirMap.entrySet()) {
                         if (uri.equals(entry.getKey())) {
                             url = (String) entry.getValue();

@@ -55,7 +55,7 @@ public class AppStartListener implements ServletContextListener {
                     line = sc.nextLine();
                     action = line.substring(0, line.lastIndexOf("="));
                     resource = line.substring(line.lastIndexOf("=") + 1);
-                    dirMap.put(action, resource);
+                    dirMap.put(action.trim(), resource.trim());
                 }//end while sc
             }//end if sc
 

@@ -24,7 +24,6 @@ import javax.servlet.RequestDispatcher;
  */
 public class SearchServlet extends HttpServlet {
 
-    private static final String SEARCH_RESULT_PAGE = "search.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,7 +39,7 @@ public class SearchServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         List<RegistrationDTO> accountList = null;
-        String url = SEARCH_RESULT_PAGE;
+        String url = "SEARCH_PAGE";
         try {
             //1. Obtain search String
             String searchValue = request.getParameter("txtSearch");

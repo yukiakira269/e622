@@ -18,7 +18,9 @@
         <c:set var="userId" value="${param.txtUsername}"/>
         <!-- The user may persist after searching (i.e update,delete), 
         thus session scope is used -->
-        <h1>Welcome, ${registration.getFullname(userId)}</h1>
+        <!--Retrieve username from the Request object's parameter-->
+
+        <h1>Welcome, admin ${registration.getFullname(userId)}</h1>
         Search for an account <br />
         <form action="search">
             <input type="text" name="txtSearch" value="${param.txtSearch}" />

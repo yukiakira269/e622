@@ -17,7 +17,7 @@
         <!--
         <%= exception.getMessage()%>  
         -->
-        <img src="Resources/main/webapp/timtim.png" alt="Sorry for the inconvenience"/>
+        <img src="src/main/webapp/timtim.png" alt="Sorry for the inconvenience"/>
         <a href="login.html">Click here to return to the login page!!!</a>
     </body>
 </html>

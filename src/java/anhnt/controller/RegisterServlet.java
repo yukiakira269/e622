@@ -22,10 +22,6 @@ import javax.servlet.RequestDispatcher;
  * @author DELL
  */
 public class RegisterServlet extends HttpServlet {
-
-    private static final String LOGIN_CONTROLLER = "LoginServlet";
-    private static final String REGISTER_PAGE = "register.jsp";
-
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -44,7 +40,7 @@ public class RegisterServlet extends HttpServlet {
         String fullname = request.getParameter("txtFullname");
         CreateErrorObject error = new CreateErrorObject();
         boolean errorFound = false;
-        String url = REGISTER_PAGE;
+        String url = "REGISTER_PAGE";
 
         PrintWriter out = response.getWriter();
         try {
@@ -69,14 +65,14 @@ public class RegisterServlet extends HttpServlet {
             }
             //2. If invalid, redirect to error page
             if (errorFound) {
-                url = REGISTER_PAGE;
+                url = "REGISTER_PAGE";
                 request.setAttribute("ERROR", error);
                 //3. if valid, call DAO methods
             } else {
                 RegistrationDAO dao = new RegistrationDAO();
                 boolean result = dao.registerAccount(userId, password, fullname, false);
                 if (result) {
-                    url = LOGIN_CONTROLLER;
+                    url = "login";
                 }
             }
 

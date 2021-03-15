@@ -1,7 +1,11 @@
-=AutoLogServlet
+=      AutoLogServlet
 logout=LogOutServlet
 login=LoginServlet
 register=RegisterServlet
 search=SearchServlet
 update=UpdateServlet
 delete=DeleteServlet
+LOGIN_PAGE     =login.html
+SEARCH_PAGE =search.jsp
+GALLERY_PAGE =gallery.jsp
+REGISTER_PAGE =register.jsp

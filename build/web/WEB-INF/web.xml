@@ -7,6 +7,8 @@
     <filter-mapping>
         <filter-name>FilterController</filter-name>
         <url-pattern>/*</url-pattern>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>REQUEST</dispatcher>
     </filter-mapping>
     <resource-ref>
         <res-auth>Container</res-auth>

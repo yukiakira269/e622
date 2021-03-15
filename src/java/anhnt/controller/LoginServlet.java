@@ -23,8 +23,6 @@ import javax.servlet.http.Cookie;
  */
 public class LoginServlet extends HttpServlet {
 
-    private final static String LOGIN_PAGE = "login.html";
-    private final static String SEARCH_PAGE = "search.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,7 +37,7 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        String url = LOGIN_PAGE;
+        String url = "LOGIN_PAGE";
         try {
             String userId = request.getParameter("txtUsername");
             System.out.println(userId);
@@ -52,10 +50,15 @@ public class LoginServlet extends HttpServlet {
                 response.addCookie(cookie);
             }
             RegistrationDAO dao = new RegistrationDAO();
-            boolean result = dao.checkLogin(userId, password);
-            if (result) {
-                url = SEARCH_PAGE;
+            int result = dao.checkLogin(userId, password);
+            //If the account is an adminstrative account, forward to account search page
+            if (result == 1) {
+                url = "SEARCH_PAGE";
+            } //If the account is a normal user account, forward to the gallery page
+            else if (result == 0) {
+                url = "GALLERY_PAGE";
             }
+            //If the result is -1, meaning no account found, forward to the login page by default
         } catch (NamingException ex) {
             log("LoginServlet Naming: " + ex.getMessage());
 
