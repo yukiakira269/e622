@@ -21,6 +21,14 @@ public class RegistrationDTO implements Serializable {
     public RegistrationDTO() {
     }
 
+    public RegistrationDTO(String userId, String password, String fullname, boolean isAdmin) {
+        this.userId = userId;
+        this.password = password;
+        this.fullname = fullname;
+        this.isAdmin = isAdmin;
+    }
+    
+
     /**
      * @return the userId
      */

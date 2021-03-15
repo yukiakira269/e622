@@ -3,3 +3,5 @@ logout=LogOutServlet
 login=LoginServlet
 register=RegisterServlet
 search=SearchServlet
+update=UpdateServlet
+delete=DeleteServlet

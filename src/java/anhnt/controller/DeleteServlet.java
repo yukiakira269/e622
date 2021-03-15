@@ -6,25 +6,20 @@
 package anhnt.controller;
 
 import anhnt.registration.RegistrationDAO;
-import anhnt.registration.RegistrationDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
-import java.util.List;
-import javax.naming.NamingException;
-import javax.servlet.RequestDispatcher;
 
 /**
  *
  * @author DELL
  */
-public class SearchServlet extends HttpServlet {
-
-    private static final String SEARCH_RESULT_PAGE = "search.jsp";
+public class DeleteServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,26 +34,19 @@ public class SearchServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        List<RegistrationDTO> accountList = null;
-        String url = SEARCH_RESULT_PAGE;
         try {
-            //1. Obtain search String
-            String searchValue = request.getParameter("txtSearch");
-            //2. Check if the search String has useful values
-            if (!searchValue.trim().isEmpty()) {
-                RegistrationDAO dao = new RegistrationDAO();
-                accountList = dao.searchAccount(searchValue);
-                request.setAttribute("SEARCH_RESULT", accountList);
-            }
-
-            //3. Maintain the result in the request scope with dispatcher
-            RequestDispatcher rd = request.getRequestDispatcher(url);
-            rd.forward(request, response);
-
-        } catch (SQLException ex) {
-            log("SearchServlet SQL: " + ex.getMessage());
+            String userId = request.getParameter("txtUserId");
+            RegistrationDAO dao = new RegistrationDAO();
+            dao.deleteAccount(userId);
+            String lastValue = request.getParameter("txtLastSearchValue");
+            String urlRewrite = "search?txtSearch=" + lastValue;
+            
+            response.sendRedirect(urlRewrite);
+            
         } catch (NamingException ex) {
-            log("SearchServlet Naming: " + ex.getMessage());
+            log("DeleteServlet Naming: " + ex.getMessage());
+        } catch (SQLException ex) {
+            log("DeleteServlet SQL: " + ex.getMessage());
         } finally {
             out.close();
         }

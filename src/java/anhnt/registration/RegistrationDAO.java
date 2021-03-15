@@ -18,6 +18,43 @@ import javax.naming.NamingException;
  */
 public class RegistrationDAO implements Serializable {
 
+    public List<String> getColumnNames()
+            throws SQLException, NamingException {
+        List<String> columnNames = new ArrayList<String>();
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        try {
+            //1. Establish connection
+            con = DBHelper.makeConnection();
+            if (con != null) {
+                //2. Prepare SQL String
+                String sql = "SELECT * FROM Registration";
+                stm = con.prepareStatement(sql);
+                rs = stm.executeQuery();
+                //3. Store result in result set
+                if (rs.next()) {
+                    ResultSetMetaData rsmd = rs.getMetaData();
+                    //4. SQL column starts from 1
+                    for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+                        String columnName = rsmd.getColumnName(i);
+                        columnNames.add(columnName);
+                    }
+                }
+            }
+
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+
+        return columnNames;
+    }
+
     public String getFullname(String userId)
             throws NamingException, SQLException {
         String fullname = null;
@@ -129,15 +166,22 @@ public class RegistrationDAO implements Serializable {
             con = DBHelper.makeConnection();
             if (con != null) {
                 //2. Prepare SQL String
-                String sql = "SELECT * FROM Registration WHERE userId = ?";
+                String sql = "SELECT userId,password,fullname,isAdmin "
+                        + "FROM Registration "
+                        + "WHERE userId LIKE ?";
                 stm = con.prepareStatement(sql);
-                stm.setString(1, userId);
+                stm.setString(1, "%" + userId + "%");
                 rs = stm.executeQuery();
-                if(rs.next()){
-                    accountList = new ArrayList<RegistrationDTO>();
-                    
+                accountList = new ArrayList<RegistrationDTO>();
+                while (rs.next()) {
+                    String usrId = rs.getString(1);
+                    String pass = rs.getString(2);
+                    String name = rs.getString(3);
+                    boolean role = rs.getBoolean(4);
+                    RegistrationDTO dto = new RegistrationDTO(usrId,
+                            pass, name, role);
+                    accountList.add(dto);
                 }
-                
             }
 
         } finally {
@@ -150,6 +194,70 @@ public class RegistrationDAO implements Serializable {
         }
 
         return accountList;
+    }
+
+    public boolean updateAccount(String userId, String password, boolean isAdmin)
+            throws NamingException, SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        try {
+            //1. Establish connection
+            con = DBHelper.makeConnection();
+            if (con != null) {
+                //2. Prepare sql string
+                String sql = "UPDATE Registration "
+                        + "SET password = ?, isAdmin = ? "
+                        + "WHERE userId = ?";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, password);
+                stm.setBoolean(2, isAdmin);
+                stm.setString(3, userId);
+                int affected = stm.executeUpdate();
+                if (affected > 0) {
+                    return true;
+                }
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return false;
+    }
+
+    public boolean deleteAccount(String userId)
+            throws NamingException, SQLException {
+
+        Connection con = null;
+        PreparedStatement stm = null;
+        try {
+            //1. Establish connection
+            con = DBHelper.makeConnection();
+            if (con != null) {
+                //2. Prepare sql string
+                String sql = "DELETE "
+                        + "FROM Registration "
+                        + "WHERE userId LIKE ?";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, userId);
+                int affected = stm.executeUpdate();
+                if (affected > 0) {
+                    return true;
+                }
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+
+        return false;
     }
 
 }
