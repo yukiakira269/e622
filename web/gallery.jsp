@@ -24,5 +24,19 @@
             <input type="text" name="txtTag" value="" />
             <input type="submit" value="Search" />
         </form>
+
+        <div id="middle" align="center">
+            <jsp:useBean id="product" class="anhnt.product.ProductDAO" scope="session"/>
+            <c:set var="posts" value="${product.imageList}"/>
+            <c:forEach items="${posts}" var="work" varStatus="counter">
+                <h2>${work.productId}</h2>
+                <h3>${work.storeQuantity}</h3>
+                <img src="data:image/jpg;base64,${work.base64Image}" 
+                     width="240" height="300" alt="test image"/>
+            </c:forEach>
+
+        </div>
+
+
     </body>
 </html>

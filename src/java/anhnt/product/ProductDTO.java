@@ -17,17 +17,21 @@ public class ProductDTO implements Serializable{
     private byte[] img;
     private int tag;
     private int likes;
-
+    private String base64Image;
+    
     public ProductDTO() {
     }
 
-    public ProductDTO(int productId, int storeQuantity, byte[] img, int tag, int likes) {
+    public ProductDTO(int productId, int storeQuantity, byte[] img, int tag, int likes, String base64Image) {
         this.productId = productId;
         this.storeQuantity = storeQuantity;
         this.img = img;
         this.tag = tag;
         this.likes = likes;
+        this.base64Image = base64Image;
     }
+
+    
 
     /**
      * @return the productId
@@ -68,7 +72,7 @@ public class ProductDTO implements Serializable{
      * @param img the img to set
      */
     public void setImg(byte[] img) {
-        this.img = img;
+        this.setImg(img);
     }
 
     /**
@@ -97,6 +101,21 @@ public class ProductDTO implements Serializable{
      */
     public void setLikes(int likes) {
         this.likes = likes;
+    }
+
+
+    /**
+     * @return the base64Image
+     */
+    public String getBase64Image() {
+        return base64Image;
+    }
+
+    /**
+     * @param base64Image the base64Image to set
+     */
+    public void setBase64Image(String base64Image) {
+        this.base64Image = base64Image;
     }
     
     
