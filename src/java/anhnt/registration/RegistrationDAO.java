@@ -8,6 +8,8 @@ package anhnt.registration;
 import anhnt.utilities.DBHelper;
 import java.io.Serializable;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import javax.naming.NamingException;
 
 /**
@@ -112,6 +114,42 @@ public class RegistrationDAO implements Serializable {
             }
         }
         return false;
+    }
+
+    private List<RegistrationDTO> accountList = null;
+
+    public List<RegistrationDTO> searchAccount(String userId)
+            throws NamingException, SQLException {
+
+        //1. Establish connection
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        try {
+            con = DBHelper.makeConnection();
+            if (con != null) {
+                //2. Prepare SQL String
+                String sql = "SELECT * FROM Registration WHERE userId = ?";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, userId);
+                rs = stm.executeQuery();
+                if(rs.next()){
+                    accountList = new ArrayList<RegistrationDTO>();
+                    
+                }
+                
+            }
+
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+
+        return accountList;
     }
 
 }

@@ -2,4 +2,4 @@
 logout=LogOutServlet
 login=LoginServlet
 register=RegisterServlet
-search=search.jsp
+search=SearchServlet
