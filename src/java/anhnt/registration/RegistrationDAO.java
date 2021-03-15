@@ -16,6 +16,37 @@ import javax.naming.NamingException;
  */
 public class RegistrationDAO implements Serializable {
 
+    public String getFullname(String userId)
+            throws NamingException, SQLException {
+        String fullname = null;
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        try {
+            //1. Establish connection
+            con = DBHelper.makeConnection();
+            if (con != null) {
+                //2. Prepare SQL String
+                String sql = "SELECT fullname FROM Registration WHERE userId = ?";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, userId);
+                //3. Execute and store in result set
+                rs = stm.executeQuery();
+                if (rs.next()) {
+                    fullname = rs.getString(1);
+                }
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return fullname;
+    }
+
     public boolean checkLogin(String userId, String password)
             throws NamingException, SQLException {
         Connection con = null;
