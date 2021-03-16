@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import javax.naming.NamingException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -36,27 +37,34 @@ public class AddToCartServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        String url = "SHOP_PAGE";
+        String url = "error";
         try {
             //1. Go to carts holder
             HttpSession session = request.getSession();
             //2. Retrieve cart from its place
             CartObject cart = (CartObject) session.getAttribute("CART");
-            //If the customer does not have a cart yet, 
-            //the customer retrieves a new cart
+            //If the customer does not have a cart
+            //retrieves a new cart
             if (cart == null) {
                 cart = new CartObject();
             }
             //3. Customer selects an item
             String sProductId = request.getParameter("txtProductId");
+
+            //4. Check to see if the wanted merchandise is still available
             int productId = Integer.parseInt(sProductId);
-            //4. Customer put said item into the cart
-            cart.addItemToCart(productId);
-            //5. Update the cart
-            session.setAttribute("CART", cart);
-            //6. Update the number of items left in the store
             ProductDAO dao = new ProductDAO();
-            dao.updateProductQuantity(productId, dao.getQuantity(productId) - 1);
+            int currentQuantity = dao.getQuantity(productId);
+            if (currentQuantity > 0) {
+                //If the merchandise is still available
+                //5. Customer put said item into the cart
+                cart.addItemToCart(productId);
+                //6. Update the cart
+                session.setAttribute("CART", cart);
+                //7. Update the number of items left in the store
+                dao.updateProductQuantity(productId, dao.getQuantity(productId) - 1);
+            }
+            url = "SHOP_PAGE";
         } catch (NamingException ex) {
             log("LoginServlet Naming: " + ex.getCause());
         } catch (SQLException ex) {
@@ -64,7 +72,6 @@ public class AddToCartServlet extends HttpServlet {
         } catch (Exception ex) {
             log("LoginServlet Exception: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
-            url = "error";
         } finally {
             response.sendRedirect(url);
             out.close();

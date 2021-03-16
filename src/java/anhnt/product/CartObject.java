@@ -24,6 +24,11 @@ public class CartObject implements Serializable {
         this.items = items;
     }
 
+    public Map<Integer, Integer> getItems() {
+        return items;
+    }
+    
+
     public void addItemToCart(int productId) {
         //If there is no cart yet, retrieve a new cart
         if (this.items == null) {

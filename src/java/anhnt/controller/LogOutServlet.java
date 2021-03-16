@@ -12,6 +12,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -33,7 +34,7 @@ public class LogOutServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            
+
             String url = "";
             Cookie[] cookies = request.getCookies();
             for (int i = 0; i < cookies.length; i++) {
@@ -41,8 +42,13 @@ public class LogOutServlet extends HttpServlet {
                 cookies[i].setValue("");
                 response.addCookie(cookies[i]);
             }
+            HttpSession session = request.getSession();
+            if (session != null) {
+                session.invalidate();
+            }
+            //Goes to AutoLogin Servlet
             response.sendRedirect(url);
-            
+
         } finally {
             out.close();
         }

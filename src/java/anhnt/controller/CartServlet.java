@@ -5,24 +5,23 @@
  */
 package anhnt.controller;
 
+import anhnt.product.CartObject;
 import anhnt.product.ProductDAO;
-import anhnt.product.ProductDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.naming.NamingException;
+import java.util.Set;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
-import java.util.List;
-import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author DELL
  */
-public class TagSearchServlet extends HttpServlet {
+public class CartServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,25 +36,25 @@ public class TagSearchServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        String urlRewrite = "error";
+        String url = "error";
         try {
-            String Description = request.getParameter("txtTag");
-            if (!Description.trim().isEmpty()) {
-                ProductDAO dao = new ProductDAO();
-                List<ProductDTO> bookList = dao.searchByTag(Description);
-                request.setAttribute("TAG_SEARCH", bookList);
+            String action = request.getParameter("btAction");
+            if (action.equals("View Cart")) {
+                
+                url = "ViewCart";
+            } else if (action.equals("Add To Cart")) {
+                url = "add";
+            } else if (action.equals("Checkout")) {
+                url = "checkout";
+            } else if (action.equals("Remove Selected")) {
+                url = "Remove";
             }
-            urlRewrite = "SHOP_PAGE?txtTag=" + Description;
-
-        } catch (SQLException ex) {
-            log("SearchServlet SQL: " + ex.getCause());
-        } catch (NamingException ex) {
-            log("SearchServlet Naming: " + ex.getCause());
         } catch (Exception ex) {
-            log("SearchServlet Exception: " + ex.toString());
+            log("LoginServlet Exception: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
+            url = "error";
         } finally {
-            RequestDispatcher rd = request.getRequestDispatcher(urlRewrite);
+            RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);
             out.close();
         }

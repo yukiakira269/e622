@@ -40,7 +40,7 @@ public class SearchServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         List<RegistrationDTO> accountList = null;
-        String url = "SEARCH_PAGE";
+        String url = "error";
         try {
             //1. Obtain search String
             String searchValue = request.getParameter("txtSearch");
@@ -50,7 +50,7 @@ public class SearchServlet extends HttpServlet {
                 accountList = dao.searchAccount(searchValue);
                 request.setAttribute("SEARCH_RESULT", accountList);
             }
-
+            url = "SEARCH_PAGE";
         } catch (SQLException ex) {
             log("SearchServlet SQL: " + ex.getCause());
         } catch (NamingException ex) {
@@ -58,7 +58,6 @@ public class SearchServlet extends HttpServlet {
         } catch (Exception ex) {
             log("SearchServlet Exception: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
-            url = "error";
         } finally {
             //3. Maintain the result in the request scope with dispatcher
             RequestDispatcher rd = request.getRequestDispatcher(url);

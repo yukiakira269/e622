@@ -17,13 +17,17 @@
                      scope="session"/>
         <!--Retrieve username from the Request object's parameter-->
         <c:set var="userId" value="${sessionScope.USERID}"/>
-        <h1>Welcome, ${registration.getFullname(userId)}</h1>
+        <h1>Welcome ${registration.getFullname(userId)}</h1>
 
         <form action="tagSearch">
             Looking for something specific?
             <input type="text" name="txtTag" value="${param.txtTag}" />
             <input type="submit" value="Search" name="btAction"/>
         </form>
+        <form action="cart">
+            <input type="submit" value="View Cart" name="btAction"/>
+        </form>
+
 
         <jsp:useBean id="product" class="anhnt.product.ProductDAO" 
                      scope="session"/>
@@ -46,7 +50,7 @@
                         <!--Each form is a row, a user can 
                         add individual books per addition--> 
 
-                    <form action="add">
+                    <form action="cart">
                         <tr>
                             <td>${counter.count}</td>
                             <td>
@@ -63,7 +67,7 @@
                                 <c:if test="${book.storeQuantity gt 0}">
                                     AVAILABLE
                                 </c:if>
-                                <c:if test="${book.storeQuantity lt 0}">
+                                <c:if test="${book.storeQuantity eq 0}">
                                     <font color="red">OUT OF STOCK</font
                                 </c:if>
                                 <input type="hidden" name="txtStoreQuantity"

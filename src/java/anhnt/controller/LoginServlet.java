@@ -72,7 +72,7 @@ public class LoginServlet extends HttpServlet {
             log("LoginServlet SQL: " + ex.getCause());
 
         } catch (Exception ex) {
-            log("LoginServlet Exception: " + ex.toString());
+            log("LoginServlet UnknownException: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
             url = "error";
         } finally {

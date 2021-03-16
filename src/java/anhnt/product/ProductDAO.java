@@ -235,7 +235,38 @@ public class ProductDAO implements Serializable {
         }
 
         return false;
-
     }
 
+    /**
+     * Retrieve the product's description based on its ID
+     */
+    public String getProductDesc(int productId)
+            throws NamingException, SQLException {
+        ProductDTO dto;
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        try {
+            //1. Establish connection
+            con = DBHelper.makeConnection();
+            //2. Prepare sql string
+            String sql = "SELECT productDesc FROM Product WHERE productId = ?";
+            stm = con.prepareStatement(sql);
+            stm.setInt(1, productId);
+            //3. Execute and store in result set
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                return rs.getString(1);
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+
+        return null;
+    }
 }

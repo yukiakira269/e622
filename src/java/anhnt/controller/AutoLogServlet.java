@@ -45,6 +45,8 @@ public class AutoLogServlet extends HttpServlet {
             if (cookies != null) {
                 //3. Retrieve the last cookie created by the client
                 Cookie lastCookie = cookies[cookies.length - 1];
+                //If there is at least 2 cookies, in which the last is JSESSIONID
+                //The last cookie would be positioned just before the JSESSIONID
                 if (lastCookie.getName().equals("JSESSIONID") && cookies.length > 1) {
                     lastCookie = cookies[cookies.length - 2];
                 }//end if lastCookie
@@ -67,7 +69,6 @@ public class AutoLogServlet extends HttpServlet {
             //forward to the login page by default
         } catch (NamingException ex) {
             log("AutoLogServlet Naming: " + ex.getMessage());
-
         } catch (SQLException ex) {
             log("AutoLogServlet SQL:" + ex.getMessage());
         } finally {

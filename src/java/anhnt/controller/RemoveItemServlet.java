@@ -5,8 +5,8 @@
  */
 package anhnt.controller;
 
+import anhnt.product.CartObject;
 import anhnt.product.ProductDAO;
-import anhnt.product.ProductDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.naming.NamingException;
@@ -14,15 +14,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
-import java.util.List;
 import javax.servlet.RequestDispatcher;
 
 /**
  *
  * @author DELL
  */
-public class TagSearchServlet extends HttpServlet {
+public class RemoveItemServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,26 +37,45 @@ public class TagSearchServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        String urlRewrite = "error";
+        String url = "error";
         try {
-            String Description = request.getParameter("txtTag");
-            if (!Description.trim().isEmpty()) {
-                ProductDAO dao = new ProductDAO();
-                List<ProductDTO> bookList = dao.searchByTag(Description);
-                request.setAttribute("TAG_SEARCH", bookList);
-            }
-            urlRewrite = "SHOP_PAGE?txtTag=" + Description;
-
-        } catch (SQLException ex) {
-            log("SearchServlet SQL: " + ex.getCause());
+            //Customer goes to cart
+            HttpSession session = request.getSession();
+            //If the session is null, there is nothing to be done
+            if (session != null) {
+                //Customer retrieves the cart
+                CartObject cart = (CartObject) session.getAttribute("CART");
+                //If the cart is empty, there is nothing to be done
+                if (cart != null) {
+                    //Customer retrieves list of unwanted items
+                    String[] removedItems = request.getParameterValues("chkRemoved");
+                    //If the list has no item, there is nothing to be done
+                    if (removedItems != null) {
+                        for (String item : removedItems) {
+                            int productId = Integer.parseInt(item);
+                            cart.removeFromCart(productId);
+                            //Update the items in the store accordingly
+                            ProductDAO dao = new ProductDAO();
+                            String sQuantityRemoved = request.getParameter("quantityRemoved");
+                            int quantityRemoved = Integer.parseInt(sQuantityRemoved);
+                            dao.updateProductQuantity(productId,
+                                    dao.getQuantity(productId) + quantityRemoved);
+                        }
+                    }
+                }
+            }//end if session
+            url = "VIEW_CART_PAGE";
         } catch (NamingException ex) {
-            log("SearchServlet Naming: " + ex.getCause());
+            log("RemoveItemServlet Naming: " + ex.getCause());
+        } catch (SQLException ex) {
+            log("RemoveItemServlet SQL: " + ex.getCause());
         } catch (Exception ex) {
             log("SearchServlet Exception: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
         } finally {
-            RequestDispatcher rd = request.getRequestDispatcher(urlRewrite);
-            rd.forward(request, response);
+//            RequestDispatcher rd = request.getRequestDispatcher(url);
+//            rd.forward(request, response);
+            response.sendRedirect(url);
             out.close();
         }
     }
