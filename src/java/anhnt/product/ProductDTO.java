@@ -14,24 +14,18 @@ import java.io.Serializable;
 public class ProductDTO implements Serializable{
     private int productId;
     private int storeQuantity;
-    private byte[] img;
-    private int tag;
-    private int likes;
-    private String base64Image;
-    
+    private int tags;
+    private String productDesc;
+
     public ProductDTO() {
     }
 
-    public ProductDTO(int productId, int storeQuantity, byte[] img, int tag, int likes, String base64Image) {
+    public ProductDTO(int productId, int storeQuantity, int tags, String productDesc) {
         this.productId = productId;
         this.storeQuantity = storeQuantity;
-        this.img = img;
-        this.tag = tag;
-        this.likes = likes;
-        this.base64Image = base64Image;
+        this.tags = tags;
+        this.productDesc = productDesc;
     }
-
-    
 
     /**
      * @return the productId
@@ -62,61 +56,33 @@ public class ProductDTO implements Serializable{
     }
 
     /**
-     * @return the img
+     * @return the tags
      */
-    public byte[] getImg() {
-        return img;
+    public int getTags() {
+        return tags;
     }
 
     /**
-     * @param img the img to set
+     * @param tags the tags to set
      */
-    public void setImg(byte[] img) {
-        this.setImg(img);
+    public void setTags(int tags) {
+        this.tags = tags;
     }
 
     /**
-     * @return the tag
+     * @return the productDesc
      */
-    public int getTag() {
-        return tag;
+    public String getProductDesc() {
+        return productDesc;
     }
 
     /**
-     * @param tag the tag to set
+     * @param productDesc the productDesc to set
      */
-    public void setTag(int tag) {
-        this.tag = tag;
+    public void setProductDesc(String productDesc) {
+        this.productDesc = productDesc;
     }
-
-    /**
-     * @return the likes
-     */
-    public int getLikes() {
-        return likes;
-    }
-
-    /**
-     * @param likes the likes to set
-     */
-    public void setLikes(int likes) {
-        this.likes = likes;
-    }
-
-
-    /**
-     * @return the base64Image
-     */
-    public String getBase64Image() {
-        return base64Image;
-    }
-
-    /**
-     * @param base64Image the base64Image to set
-     */
-    public void setBase64Image(String base64Image) {
-        this.base64Image = base64Image;
-    }
+    
     
     
     

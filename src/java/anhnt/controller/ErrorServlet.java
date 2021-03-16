@@ -5,22 +5,21 @@
  */
 package anhnt.controller;
 
-import anhnt.registration.RegistrationDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
-import javax.naming.NamingException;
-import javax.servlet.RequestDispatcher;
 
 /**
  *
  * @author DELL
  */
-public class UpdateServlet extends HttpServlet {
+@WebServlet(name = "ErrorServlet", urlPatterns = {"/ErrorServlet"})
+public class ErrorServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,45 +34,21 @@ public class UpdateServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        String urlRewrite = "error?src" + request.getPathInfo();
         try {
-            String userId = request.getParameter("txtUserId");
-            String password = request.getParameter("txtPassword");
-            String sIsAdmin = request.getParameter("checkAdmin");
-            boolean isAdmin = false;
-            //Execute only if params are not null
-            if (userId != null && password != null) {
-                RegistrationDAO dao = new RegistrationDAO();
-                String lastSearchValue = request.getParameter("lastSearchValue");
-                urlRewrite = "search?txtSearch=" + lastSearchValue;
-                // Is the checkbox is check, sIsAdmin will not be null
-                if (sIsAdmin != null) {
-                    isAdmin = true;
-                }
-                //Check for password length error, synchronous with the RegisterServlet
-                if (password.trim().length() < 5 || password.trim().length() > 15) {
-                    String passwordLengthError = "PASSWORD LENGTH EXCEEDED! "
-                            + "MUST BE BETWEEN 5 AND 15 CHARACTERS";
-                    request.setAttribute("PASS_LENGTH_ERR", passwordLengthError);
-                    //Use request dispatcher to maintain the request scope
-                    RequestDispatcher rd = request.getRequestDispatcher(urlRewrite);
-                    rd.forward(request, response);
-                } else {
-                    //if no error is found!!!
-                    dao.updateAccount(userId, password, isAdmin);
-                }
-
-            }//end if userId 
-        } catch (SQLException ex) {
-            log("UpdateServlet SQL: " + ex.getCause());
-        } catch (NamingException ex) {
-            log("UpdateServlet Naming: " + ex.getCause());
-        } catch (Exception ex) {
-            log("UpdateServlet Exception: " + ex.toString());
-            request.setAttribute("OMNI_ERROR", ex.toString());
-            urlRewrite = "error";
+            String omniError = (String) request.getAttribute("OMNI_ERROR");
+            if (omniError != null) {
+                System.out.println("omni error not null");
+                omniError += " Error happened at " + request.getPathInfo();
+                request.setAttribute("OMNI_ERROR", omniError);
+            } else {
+                System.out.println("omni error is null");
+                omniError = " Unknown error happened at " + request.getPathInfo();
+                request.setAttribute("OMNI_ERROR", omniError);
+            }
+            String url = "ERROR_PAGE";
+            RequestDispatcher rd = request.getRequestDispatcher(url);
+            rd.forward(request, response);
         } finally {
-            response.sendRedirect(urlRewrite);
             out.close();
         }
     }

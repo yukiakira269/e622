@@ -24,7 +24,6 @@ import javax.servlet.RequestDispatcher;
  */
 public class SearchServlet extends HttpServlet {
 
-
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -33,6 +32,8 @@ public class SearchServlet extends HttpServlet {
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
+     * @throws javax.naming.NamingException
+     * @throws java.sql.SQLException
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -50,15 +51,18 @@ public class SearchServlet extends HttpServlet {
                 request.setAttribute("SEARCH_RESULT", accountList);
             }
 
+        } catch (SQLException ex) {
+            log("SearchServlet SQL: " + ex.getCause());
+        } catch (NamingException ex) {
+            log("SearchServlet Naming: " + ex.getCause());
+        } catch (Exception ex) {
+            log("SearchServlet Exception: " + ex.toString());
+            request.setAttribute("OMNI_ERROR", ex.toString());
+            url = "error";
+        } finally {
             //3. Maintain the result in the request scope with dispatcher
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);
-
-        } catch (SQLException ex) {
-            log("SearchServlet SQL: " + ex.getMessage());
-        } catch (NamingException ex) {
-            log("SearchServlet Naming: " + ex.getMessage());
-        } finally {
             out.close();
         }
     }

@@ -22,6 +22,7 @@ import javax.servlet.RequestDispatcher;
  * @author DELL
  */
 public class RegisterServlet extends HttpServlet {
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -44,37 +45,39 @@ public class RegisterServlet extends HttpServlet {
 
         PrintWriter out = response.getWriter();
         try {
-            //1. Check for valid user inputs
-            if (userId.trim().length() < 5 || userId.trim().length() > 15) {
-                errorFound = true;
-                error.setUsernameLengthErr("!!! USERNAME MUST BE BETWEEN 5"
-                        + " AND 15 CHARACTERS");
-            }
-            if (password.trim().length() < 5 || password.trim().length() > 15) {
-                errorFound = true;
-                error.setPasswordLengthErr("!!! PASSWORD MUST BE BETWEEN 5"
-                        + " AND 15 CHARACTERS");
-            }
-            if (!password.equals(confirm)) {
-                errorFound = true;
-                error.setConfirmNotMatchErr("!!! CONFIRMATION FAILED !!!");
-            }
-            if (fullname.trim().length() < 5 || fullname.trim().length() > 40) {
-                errorFound = true;
-                error.setFullnameLengthErr("!!! NAME FORMAT UNSUPPORTED !!!");
-            }
-            //2. If invalid, redirect to error page
-            if (errorFound) {
-                url = "REGISTER_PAGE";
-                request.setAttribute("ERROR", error);
-                //3. if valid, call DAO methods
-            } else {
-                RegistrationDAO dao = new RegistrationDAO();
-                boolean result = dao.registerAccount(userId, password, fullname, false);
-                if (result) {
-                    url = "login";
+            if (userId != null && password != null && confirm != null && fullname != null) {
+                //1. Check for valid user inputs
+                if (userId.trim().length() < 5 || userId.trim().length() > 15) {
+                    errorFound = true;
+                    error.setUsernameLengthErr("!!! USERNAME MUST BE BETWEEN 5"
+                            + " AND 15 CHARACTERS");
+                }//end if userId
+                if (password.trim().length() < 5 || password.trim().length() > 15) {
+                    errorFound = true;
+                    error.setPasswordLengthErr("!!! PASSWORD MUST BE BETWEEN 5"
+                            + " AND 15 CHARACTERS");
+                }//end if password
+                if (!password.equals(confirm)) {
+                    errorFound = true;
+                    error.setConfirmNotMatchErr("!!! CONFIRMATION FAILED !!!");
+                }//end if !password
+                if (fullname.trim().length() < 5 || fullname.trim().length() > 40) {
+                    errorFound = true;
+                    error.setFullnameLengthErr("!!! NAME FORMAT UNSUPPORTED !!!");
+                }//end if fullname
+                //2. If invalid, redirect to error page
+                if (errorFound) {
+                    url = "REGISTER_PAGE";
+                    request.setAttribute("ERROR", error);
+                    //3. if valid, call DAO methods
+                } else {
+                    RegistrationDAO dao = new RegistrationDAO();
+                    boolean result = dao.registerAccount(userId, password, fullname, false);
+                    if (result) {
+                        url = "login";
+                    }//end if restul
                 }
-            }
+            }//end if userId is null
 
         } catch (SQLException ex) {
             System.out.println("DUPLICATED!!!");
@@ -85,10 +88,13 @@ public class RegisterServlet extends HttpServlet {
                 error.setUsernameDuplicatedErr("!!! THIS USERNAME HAS BEEN TAKEN!"
                         + " PLEASE TRY AGAIN !!!");
                 request.setAttribute("ERROR", error);
-
             }
         } catch (NamingException ex) {
-            log("RegisterServlet Naming: " + ex.getMessage());
+            log("RegisterServlet Naming: " + ex.getCause());
+        } catch (Exception ex) {
+            log("RegisterServlet Exception: " + ex.toString());
+            request.setAttribute("OMNI_ERROR", ex.toString());
+            url = "error";
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);

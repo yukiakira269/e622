@@ -34,20 +34,23 @@ public class DeleteServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        String urlRewrite = "error";
         try {
             String userId = request.getParameter("txtUserId");
             RegistrationDAO dao = new RegistrationDAO();
             dao.deleteAccount(userId);
             String lastValue = request.getParameter("txtLastSearchValue");
-            String urlRewrite = "search?txtSearch=" + lastValue;
-            
-            response.sendRedirect(urlRewrite);
-            
+            urlRewrite = "search?txtSearch=" + lastValue;
+
         } catch (NamingException ex) {
-            log("DeleteServlet Naming: " + ex.getMessage());
+            log("DeleteServlet Naming: " + ex.getCause());
         } catch (SQLException ex) {
-            log("DeleteServlet SQL: " + ex.getMessage());
+            log("DeleteServlet SQL: " + ex.getCause());
+        } catch (Exception ex) {
+            log("DeleteServlet Exception: " + ex.toString());
+            request.setAttribute("OMNI_ERROR", ex.toString());
         } finally {
+            response.sendRedirect(urlRewrite);
             out.close();
         }
     }

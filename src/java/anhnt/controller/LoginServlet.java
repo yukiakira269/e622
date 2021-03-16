@@ -16,13 +16,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author DELL
  */
 public class LoginServlet extends HttpServlet {
-
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,33 +38,43 @@ public class LoginServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         String url = "LOGIN_PAGE";
+        HttpSession session = request.getSession();
         try {
             String userId = request.getParameter("txtUsername");
-            System.out.println(userId);
             String password = request.getParameter("txtPassword");
             //If the client chooses to remember password
             String sAutoLogin = request.getParameter("checkRemember");
-            if (sAutoLogin != null) {
-                Cookie cookie = new Cookie(userId, password);
-                cookie.setMaxAge(60 * 5);
-                response.addCookie(cookie);
-            }
-            RegistrationDAO dao = new RegistrationDAO();
-            int result = dao.checkLogin(userId, password);
-            //If the account is an adminstrative account, forward to account search page
-            if (result == 1) {
-                url = "SEARCH_PAGE";
-            } //If the account is a normal user account, forward to the gallery page
-            else if (result == 0) {
-                url = "GALLERY_PAGE";
-            }
-            //If the result is -1, meaning no account found, forward to the login page by default
+            //Execute only if the userId and password is not null
+            if (userId != null && password != null) {
+                if (sAutoLogin != null) {
+                    Cookie cookie = new Cookie(userId, password);
+                    cookie.setMaxAge(60 * 5);
+                    response.addCookie(cookie);
+                }
+                RegistrationDAO dao = new RegistrationDAO();
+                int result = dao.checkLogin(userId, password);
+                //Session scope to use the information in succesive requests
+                session.setAttribute("USERID", userId);
+                //If the account is an adminstrative account, forward to account search page
+                if (result == 1) {
+                    url = "SEARCH_PAGE";
+                } //If the account is a normal user account, forward to the gallery page
+                else if (result == 0) {
+                    url = "SHOP_PAGE";
+                }
+                //If the result is -1, meaning no account found, forward to the login page by default
+            }//end if userId null
+
         } catch (NamingException ex) {
-            log("LoginServlet Naming: " + ex.getMessage());
+            log("LoginServlet Naming: " + ex.getCause());
 
         } catch (SQLException ex) {
-            log("LoginServlet SQL: " + ex.getMessage());
+            log("LoginServlet SQL: " + ex.getCause());
 
+        } catch (Exception ex) {
+            log("LoginServlet Exception: " + ex.toString());
+            request.setAttribute("OMNI_ERROR", ex.toString());
+            url = "error";
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);

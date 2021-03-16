@@ -48,6 +48,14 @@
         <servlet-name>DeleteServlet</servlet-name>
         <servlet-class>anhnt.controller.DeleteServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddToCartServlet</servlet-name>
+        <servlet-class>anhnt.controller.AddToCartServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TagSearchServlet</servlet-name>
+        <servlet-class>anhnt.controller.TagSearchServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -75,6 +83,14 @@
     <servlet-mapping>
         <servlet-name>DeleteServlet</servlet-name>
         <url-pattern>/DeleteServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddToCartServlet</servlet-name>
+        <url-pattern>/AddToCartServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TagSearchServlet</servlet-name>
+        <url-pattern>/TagSearchServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

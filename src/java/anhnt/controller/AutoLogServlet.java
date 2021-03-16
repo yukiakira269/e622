@@ -59,11 +59,12 @@ public class AutoLogServlet extends HttpServlet {
                 url = "SEARCH_PAGE";
             } //If the account is a normal user account, forward to the gallery page
             else if (result == 0) {
-                url = "GALLERY_PAGE";
+                url = "SHOP_PAGE";
                 //If this is the first login of the session (i.e no cookies is found),
                 //forward to login page
             }
-            //If the result is -1, meaning no account found, forward to the login page by default
+            //If the result is -1, meaning no account found,
+            //forward to the login page by default
         } catch (NamingException ex) {
             log("AutoLogServlet Naming: " + ex.getMessage());
 
@@ -72,7 +73,6 @@ public class AutoLogServlet extends HttpServlet {
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);
-//response.sendRedirect(url);
             out.close();
         }
     }

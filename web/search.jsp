@@ -15,11 +15,10 @@
     <body>
         <jsp:useBean id="registration" class="anhnt.registration.RegistrationDAO" 
                      scope="session"/>
-        <c:set var="userId" value="${param.txtUsername}"/>
+        <c:set var="userId" value="${sessionScope.USERID}" scope="session"/>
         <!-- The user may persist after searching (i.e update,delete), 
         thus session scope is used -->
         <!--Retrieve username from the Request object's parameter-->
-
         <h1>Welcome, admin ${registration.getFullname(userId)}</h1>
         Search for an account <br />
         <form action="search">
@@ -58,6 +57,7 @@
                                 </td>
                                 <td>
                                     <input type="text" name="txtPassword" value="${dto.password}" />
+
                                 </td>
                                 <td>
                                     ${dto.fullname}
@@ -86,12 +86,18 @@
                             </tr>
                         </form>
                     </c:forEach>
+                    <c:if test="${not empty requestScope.PASS_LENGTH_ERR}">
+                        <font color="red">
+                        ${requestScope.PASS_LENGTH_ERR}
+                        </font>
+                    </c:if>
                 </tbody>
             </table>
 
         </c:if>
         <c:if test="${empty requestScope.SEARCH_RESULT}">
-            <font color="red">No matching entry found!</font><br />
+            <font color="red">No matching entry of "${param.txtSearch}" found!
+            Please make sure your query was correct</font><br />
         </c:if>
     </c:if>
 

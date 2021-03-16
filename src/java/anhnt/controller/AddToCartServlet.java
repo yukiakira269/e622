@@ -5,22 +5,23 @@
  */
 package anhnt.controller;
 
-import anhnt.registration.RegistrationDAO;
+import anhnt.product.CartObject;
+import anhnt.product.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
-import javax.naming.NamingException;
-import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author DELL
  */
-public class UpdateServlet extends HttpServlet {
+public class AddToCartServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,45 +36,37 @@ public class UpdateServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        String urlRewrite = "error?src" + request.getPathInfo();
+        String url = "SHOP_PAGE";
         try {
-            String userId = request.getParameter("txtUserId");
-            String password = request.getParameter("txtPassword");
-            String sIsAdmin = request.getParameter("checkAdmin");
-            boolean isAdmin = false;
-            //Execute only if params are not null
-            if (userId != null && password != null) {
-                RegistrationDAO dao = new RegistrationDAO();
-                String lastSearchValue = request.getParameter("lastSearchValue");
-                urlRewrite = "search?txtSearch=" + lastSearchValue;
-                // Is the checkbox is check, sIsAdmin will not be null
-                if (sIsAdmin != null) {
-                    isAdmin = true;
-                }
-                //Check for password length error, synchronous with the RegisterServlet
-                if (password.trim().length() < 5 || password.trim().length() > 15) {
-                    String passwordLengthError = "PASSWORD LENGTH EXCEEDED! "
-                            + "MUST BE BETWEEN 5 AND 15 CHARACTERS";
-                    request.setAttribute("PASS_LENGTH_ERR", passwordLengthError);
-                    //Use request dispatcher to maintain the request scope
-                    RequestDispatcher rd = request.getRequestDispatcher(urlRewrite);
-                    rd.forward(request, response);
-                } else {
-                    //if no error is found!!!
-                    dao.updateAccount(userId, password, isAdmin);
-                }
-
-            }//end if userId 
-        } catch (SQLException ex) {
-            log("UpdateServlet SQL: " + ex.getCause());
+            //1. Go to carts holder
+            HttpSession session = request.getSession();
+            //2. Retrieve cart from its place
+            CartObject cart = (CartObject) session.getAttribute("CART");
+            //If the customer does not have a cart yet, 
+            //the customer retrieves a new cart
+            if (cart == null) {
+                cart = new CartObject();
+            }
+            //3. Customer selects an item
+            String sProductId = request.getParameter("txtProductId");
+            int productId = Integer.parseInt(sProductId);
+            //4. Customer put said item into the cart
+            cart.addItemToCart(productId);
+            //5. Update the cart
+            session.setAttribute("CART", cart);
+            //6. Update the number of items left in the store
+            ProductDAO dao = new ProductDAO();
+            dao.updateProductQuantity(productId, dao.getQuantity(productId) - 1);
         } catch (NamingException ex) {
-            log("UpdateServlet Naming: " + ex.getCause());
+            log("LoginServlet Naming: " + ex.getCause());
+        } catch (SQLException ex) {
+            log("LoginServlet SQL: " + ex.getCause());
         } catch (Exception ex) {
-            log("UpdateServlet Exception: " + ex.toString());
+            log("LoginServlet Exception: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
-            urlRewrite = "error";
+            url = "error";
         } finally {
-            response.sendRedirect(urlRewrite);
+            response.sendRedirect(url);
             out.close();
         }
     }
