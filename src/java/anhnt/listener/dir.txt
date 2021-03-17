@@ -9,6 +9,7 @@ error=ErrorServlet
 add=AddToCartServlet
 tagSearch=TagSearchServlet
 cart=CartServlet
+checkout=CheckoutServlet
 Remove=RemoveItemServlet
 ViewCart=ViewCartServlet
 LOGIN_PAGE     =login.html

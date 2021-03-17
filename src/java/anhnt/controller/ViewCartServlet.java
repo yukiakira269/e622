@@ -46,7 +46,7 @@ public class ViewCartServlet extends HttpServlet {
                     //Retrieve items' IDs listing from the cart
                     Set keySet = cart.getItems().keySet();
                     //Add extra information (if any) for viewing the cart
-                    if (!keySet.isEmpty()) {
+                    if (keySet != null) {
                         session.setAttribute("KEY_SET", keySet);
                     }
                 }//end if cart

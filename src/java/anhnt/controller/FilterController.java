@@ -111,6 +111,7 @@ public class FilterController implements Filter {
         String url = null;
         ServletContext ctx = req.getServletContext();
         Map<String, String> dirMap = new HashMap<String, String>();
+        System.out.println("FILTERRING");
         try {
             //2. Retrieve the context to obtain attributes within the scope
             if (ctx != null) {
@@ -127,9 +128,12 @@ public class FilterController implements Filter {
                 }
             }
             if (url != null) {
+                System.out.println("URL is not null");
                 RequestDispatcher rd = req.getRequestDispatcher(url);
                 rd.forward(request, response);
             } else {
+                System.out.println("URL is null");
+                //Complete the request (i.e forward to AutoLogServlet)
                 chain.doFilter(request, response);
             }
 

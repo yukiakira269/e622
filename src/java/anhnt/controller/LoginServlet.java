@@ -54,7 +54,8 @@ public class LoginServlet extends HttpServlet {
                 RegistrationDAO dao = new RegistrationDAO();
                 int result = dao.checkLogin(userId, password);
                 //Session scope to use the information in succesive requests
-                session.setAttribute("USERID", userId);
+                String fullname = dao.getFullname(userId);
+                session.setAttribute("FULLNAME", fullname);
                 //If the account is an adminstrative account, forward to account search page
                 if (result == 1) {
                     url = "SEARCH_PAGE";

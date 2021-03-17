@@ -55,9 +55,7 @@ public class UpdateServlet extends HttpServlet {
                     String passwordLengthError = "PASSWORD LENGTH EXCEEDED! "
                             + "MUST BE BETWEEN 5 AND 15 CHARACTERS";
                     request.setAttribute("PASS_LENGTH_ERR", passwordLengthError);
-                    //Use request dispatcher to maintain attributes the request scope
-                    RequestDispatcher rd = request.getRequestDispatcher(urlRewrite);
-                    rd.forward(request, response);
+
                 } else {
                     //if no error is found, update the account
                     dao.updateAccount(userId, password, isAdmin);
@@ -71,7 +69,10 @@ public class UpdateServlet extends HttpServlet {
             log("UpdateServlet Exception: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
         } finally {
-            response.sendRedirect(urlRewrite);
+//          response.sendRedirect(urlRewrite);
+            //Use request dispatcher to maintain attributes the request scope (if any)
+            RequestDispatcher rd = request.getRequestDispatcher(urlRewrite);
+            rd.forward(request, response);
             out.close();
         }
     }

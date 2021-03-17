@@ -15,11 +15,10 @@
     <body>
         <jsp:useBean id="registration" class="anhnt.registration.RegistrationDAO" 
                      scope="session"/>
-        <c:set var="userId" value="${sessionScope.USERID}" scope="session"/>
         <!-- The user may persist after searching (i.e update,delete), 
         thus session scope is used -->
         <!--Retrieve username from the Request object's parameter-->
-        <h1>Welcome, admin ${registration.getFullname(userId)}</h1>
+        <h1>Welcome admin ${sessionScope.FULLNAME}</h1>
         Search for an account <br />
         <form action="search">
             <input type="text" name="txtSearch" value="${param.txtSearch}" />
@@ -33,7 +32,8 @@
                     <thead>
                         <tr>
                             <!-- Call the getter methods of column names in DAO-->
-                            <c:set var="columnNames" value="${registration.columnNames}"/>
+                            <c:set var="columnNames" 
+                                   value="${registration.columnNames}"/>
                             <th>No.</th>
                                 <c:forEach items="${columnNames}" var="col">
                                 <th>${col}</th>
@@ -43,9 +43,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:set var="searchResult" value="${requestScope.SEARCH_RESULT}"/>
-
-                        <c:forEach items="${searchResult}" var="dto" varStatus="counter">
+                        <c:set var="searchResult" 
+                               value="${requestScope.SEARCH_RESULT}"/>
+                        <c:forEach items="${searchResult}" var="dto"
+                                   varStatus="counter">
                         <form action="update">
                             <tr>
                                 <td>
@@ -53,10 +54,12 @@
                                 </td>
                                 <td>
                                     ${dto.userId}
-                                    <input type="hidden" name="txtUserId" value="${dto.userId}" />
+                                    <input type="hidden" name="txtUserId"
+                                           value="${dto.userId}" />
                                 </td>
                                 <td>
-                                    <input type="text" name="txtPassword" value="${dto.password}" />
+                                    <input type="text" name="txtPassword"
+                                           value="${dto.password}" />
 
                                 </td>
                                 <td>
@@ -64,7 +67,8 @@
                                 </td>
                                 <td>
                                     <!-- If isAdmin is true, the checkbox is checked-->
-                                    <input type="checkbox" name="checkAdmin" value="isAdmin" 
+                                    <input type="checkbox" name="checkAdmin" 
+                                           value="isAdmin" 
                                            <c:if test="${dto.isAdmin}">
                                                checked
                                            </c:if>
@@ -78,8 +82,10 @@
                                 </td>
                                 <td>
                                     <c:url scope="request" var="del" value="delete">
-                                        <c:param name="txtUserId" value="${dto.userId}"/>
-                                        <c:param name="txtLastSearchValue" value="${param.txtSearch}"/>
+                                        <c:param name="txtUserId"
+                                                 value="${dto.userId}"/>
+                                        <c:param name="txtLastSearchValue"
+                                                 value="${param.txtSearch}"/>
                                     </c:url>
                                     <a href="${del}">Delete</a>
                                 </td>

@@ -16,43 +16,44 @@
         <c:set var="cart" value="${sessionScope.CART}"/>
         <c:set var="keySet" value="${sessionScope.KEY_SET}" />
         <jsp:useBean id="dao" class="anhnt.product.ProductDAO" scope="session"/>
-        <c:if test="${not empty cart}">
-            <c:if test="${not empty keySet}">
-                <table border="1">
-                    <thead>
+        <c:if test="${not empty keySet}">
+            <h1>The cart currently has: </h1>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Product ID</th>
+                        <th>Description</th>
+                        <th>Quantity in Cart</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <form action="cart">
+                    <c:forEach items="${keySet}" var="key" varStatus="counter">
                         <tr>
-                            <th>No.</th>
-                            <th>Product ID</th>
-                            <th>Description</th>
-                            <th>Quantity in Cart</th>
-                            <th>Remove</th>
+                            <td>${counter.count}</td>
+                            <td>${key}</td>
+                            <td>${dao.getProductDesc(key)}</td>
+                            <td>
+                                ${cart.items[key]}
+                                <input type="hidden" name="quantity" 
+                                       value="${cart.items[key]}" />
+                            </td>
+                            <td>
+                                <input type="checkbox" name="chkRemoved" 
+                                       value="${key}" />
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                    <form action="cart">
+                    </c:forEach>
+                    <input type="submit" value="Remove Selected" name="btAction"/>
+                    <input type="submit" value="Commit Purchase" name="btAction"/>
+                </form>
 
-                        <c:forEach items="${keySet}" var="key" varStatus="counter">
-                            <tr>
-                                <td>${counter.count}</td>
-                                <td>${key}</td>
-                                <td>${dao.getProductDesc(key)}</td>
-                                <td>${cart.items[key]}</td>
-                                <td>
-                                    <input type="checkbox" name="chkRemoved" 
-                                           value="${key}" />
-                                    <input type="hidden" name="quantityRemoved" 
-                                           value="${cart.items[key]}" />
-                                </td>
-                            </tr>
-                        </c:forEach>
-                        <input type="submit" value="Remove Selected" name="btAction"/>
-                    </form>
-
-                </tbody>
-            </table>
-        </c:if>
+            </tbody>
+        </table>
     </c:if>
-    <c:if test="${empty cart}">
+    <c:if test="${empty keySet}">
         <h1>The cart is currently empty!!!</h1>
     </c:if>
     <a href="SHOP_PAGE">Back to shopping page</a>

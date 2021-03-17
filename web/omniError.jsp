@@ -13,7 +13,7 @@
     </head>
     <body>
         <h1>An unexpected error has happened...</h1>
-        <img src="src/main/webapp/chettronglong.png" alt="Something is wrong">
+        <img src="src/main/webapp/chettronglong.png" alt="Something is wrong"><br />
         <a href="logout">Click here to return to the home page</a><br />
         <!--        Or do that to view the error
         ${requestScope.OMNI_ERROR}

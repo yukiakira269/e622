@@ -5,23 +5,20 @@
  */
 package anhnt.controller;
 
-import anhnt.product.CartObject;
-import anhnt.product.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Set;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author DELL
  */
-public class CartServlet extends HttpServlet {
+@WebServlet(name = "CheckoutServlet", urlPatterns = {"/CheckoutServlet"})
+public class CheckoutServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,24 +33,9 @@ public class CartServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        String url = "error";
         try {
-            String action = request.getParameter("btAction");
-            if (action.equals("View Cart")) {
-                url = "ViewCart";
-            } else if (action.equals("Add To Cart")) {
-                url = "add";
-            } else if (action.equals("Commit Purchase")) {
-                url = "checkout";
-            } else if (action.equals("Remove Selected")) {
-                url = "Remove";
-            }
-        } catch (NullPointerException ex) {
-            log("LoginServlet NullPonter: " + ex.toString());
-            request.setAttribute("OMNI_ERROR", ex.toString());
+            
         } finally {
-            RequestDispatcher rd = request.getRequestDispatcher(url);
-            rd.forward(request, response);
             out.close();
         }
     }

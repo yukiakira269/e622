@@ -56,7 +56,7 @@ public class RemoveItemServlet extends HttpServlet {
                             cart.removeFromCart(productId);
                             //Update the items in the store accordingly
                             ProductDAO dao = new ProductDAO();
-                            String sQuantityRemoved = request.getParameter("quantityRemoved");
+                            String sQuantityRemoved = request.getParameter("quantity");
                             int quantityRemoved = Integer.parseInt(sQuantityRemoved);
                             dao.updateProductQuantity(productId,
                                     dao.getQuantity(productId) + quantityRemoved);

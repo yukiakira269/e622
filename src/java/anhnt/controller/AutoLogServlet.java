@@ -38,6 +38,7 @@ public class AutoLogServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         int result = -1;
         String url = "LOGIN_PAGE";
+        System.out.println("AUTOLOGGING");
         try {
             //1. Retrieve clients' cookies
             Cookie[] cookies = request.getCookies();

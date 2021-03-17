@@ -64,7 +64,9 @@ public class AddToCartServlet extends HttpServlet {
                 //7. Update the number of items left in the store
                 dao.updateProductQuantity(productId, dao.getQuantity(productId) - 1);
             }
-            url = "SHOP_PAGE";
+            //Recall the search function
+            String lastSearch = request.getParameter("lastTagValue");
+            url = "tagSearch?txtTag=" + lastSearch;
         } catch (NamingException ex) {
             log("LoginServlet Naming: " + ex.getCause());
         } catch (SQLException ex) {

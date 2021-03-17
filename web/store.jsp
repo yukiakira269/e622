@@ -16,8 +16,7 @@
         <jsp:useBean id="registration" class="anhnt.registration.RegistrationDAO"
                      scope="session"/>
         <!--Retrieve username from the Request object's parameter-->
-        <c:set var="userId" value="${sessionScope.USERID}"/>
-        <h1>Welcome ${registration.getFullname(userId)}</h1>
+        <h1>Welcome ${sessionScope.FULLNAME}</h1>
 
         <form action="tagSearch">
             Looking for something specific?
