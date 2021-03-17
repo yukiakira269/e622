@@ -44,8 +44,12 @@ public class DeleteServlet extends HttpServlet {
 
         } catch (NamingException ex) {
             log("DeleteServlet Naming: " + ex.getCause());
+            request.setAttribute("OMNI_ERROR", ex.toString());
+
         } catch (SQLException ex) {
             log("DeleteServlet SQL: " + ex.getCause());
+            request.setAttribute("OMNI_ERROR", ex.toString());
+
         } catch (Exception ex) {
             log("DeleteServlet Exception: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());

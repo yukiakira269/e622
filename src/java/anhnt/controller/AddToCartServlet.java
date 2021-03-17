@@ -69,8 +69,12 @@ public class AddToCartServlet extends HttpServlet {
             url = "tagSearch?txtTag=" + lastSearch;
         } catch (NamingException ex) {
             log("LoginServlet Naming: " + ex.getCause());
+            request.setAttribute("OMNI_ERROR", ex.toString());
+
         } catch (SQLException ex) {
             log("LoginServlet SQL: " + ex.getCause());
+            request.setAttribute("OMNI_ERROR", ex.toString());
+
         } catch (Exception ex) {
             log("LoginServlet Exception: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());

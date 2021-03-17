@@ -239,6 +239,10 @@ public class ProductDAO implements Serializable {
 
     /**
      * Retrieve the product's description based on its ID
+     * @param productId
+     * @return 
+     * @throws javax.naming.NamingException
+     * @throws java.sql.SQLException
      */
     public String getProductDesc(int productId)
             throws NamingException, SQLException {

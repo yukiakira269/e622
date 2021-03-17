@@ -6,7 +6,6 @@
 package anhnt.ordersDetail;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  *
@@ -16,16 +15,14 @@ public class OrdersDetailDTO implements Serializable{
     private int orderId;
     private int productId;
     private int orderQuantity;
-    private Date date;
 
     public OrdersDetailDTO() {
     }
 
-    public OrdersDetailDTO(int orderId, int productId, int orderQuantity, Date date) {
+    public OrdersDetailDTO(int orderId, int productId, int orderQuantity) {
         this.orderId = orderId;
         this.productId = productId;
         this.orderQuantity = orderQuantity;
-        this.date = date;
     }
 
     /**
@@ -70,19 +67,6 @@ public class OrdersDetailDTO implements Serializable{
         this.orderQuantity = orderQuantity;
     }
 
-    /**
-     * @return the date
-     */
-    public Date getDate() {
-        return date;
-    }
-
-    /**
-     * @param date the date to set
-     */
-    public void setDate(Date date) {
-        this.date = date;
-    }
     
     
     

@@ -68,9 +68,11 @@ public class LoginServlet extends HttpServlet {
 
         } catch (NamingException ex) {
             log("LoginServlet Naming: " + ex.getCause());
+            request.setAttribute("OMNI_ERROR", ex.toString());
 
         } catch (SQLException ex) {
             log("LoginServlet SQL: " + ex.getCause());
+            request.setAttribute("OMNI_ERROR", ex.toString());
 
         } catch (Exception ex) {
             log("LoginServlet UnknownException: " + ex.toString());

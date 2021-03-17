@@ -63,8 +63,12 @@ public class UpdateServlet extends HttpServlet {
             }//end if userId 
         } catch (SQLException ex) {
             log("UpdateServlet SQL: " + ex.getCause());
+            request.setAttribute("OMNI_ERROR", ex.toString());
+
         } catch (NamingException ex) {
             log("UpdateServlet Naming: " + ex.getCause());
+            request.setAttribute("OMNI_ERROR", ex.toString());
+
         } catch (Exception ex) {
             log("UpdateServlet Exception: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());

@@ -10,6 +10,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Maintenance warning</title>
+        <link rel="stylesheet" href="./src/main/webapp/styles.css"/>
     </head>
     <body>
         <h1>This segment is currently under maintenance!</h1>

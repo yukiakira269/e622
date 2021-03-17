@@ -128,12 +128,9 @@ public class FilterController implements Filter {
                 }
             }
             if (url != null) {
-                System.out.println("URL is not null");
                 RequestDispatcher rd = req.getRequestDispatcher(url);
                 rd.forward(request, response);
             } else {
-                System.out.println("URL is null");
-                //Complete the request (i.e forward to AutoLogServlet)
                 chain.doFilter(request, response);
             }
 

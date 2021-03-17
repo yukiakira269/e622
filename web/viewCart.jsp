@@ -11,6 +11,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Your Cart</title>
+        <link rel="stylesheet" href="./src/main/webapp/styles.css"/>
+
     </head>
     <body>
         <c:set var="cart" value="${sessionScope.CART}"/>
@@ -33,7 +35,10 @@
                     <c:forEach items="${keySet}" var="key" varStatus="counter">
                         <tr>
                             <td>${counter.count}</td>
-                            <td>${key}</td>
+                            <td>${key}
+                                <input type="hidden" name="productId"
+                                       value=${key}"" />
+                            </td>
                             <td>${dao.getProductDesc(key)}</td>
                             <td>
                                 ${cart.items[key]}

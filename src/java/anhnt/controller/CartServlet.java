@@ -44,9 +44,11 @@ public class CartServlet extends HttpServlet {
             } else if (action.equals("Add To Cart")) {
                 url = "add";
             } else if (action.equals("Commit Purchase")) {
-                url = "checkout";
+                url = "CHECK_OUT_PAGE";
             } else if (action.equals("Remove Selected")) {
                 url = "Remove";
+            } else if (action.equals("Order")) {
+                url = "checkout";
             }
         } catch (NullPointerException ex) {
             log("LoginServlet NullPonter: " + ex.toString());

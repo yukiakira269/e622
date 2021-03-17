@@ -91,6 +91,8 @@ public class RegisterServlet extends HttpServlet {
             }
         } catch (NamingException ex) {
             log("RegisterServlet Naming: " + ex.getCause());
+            request.setAttribute("OMNI_ERROR", ex.toString());
+
         } catch (Exception ex) {
             log("RegisterServlet Exception: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());

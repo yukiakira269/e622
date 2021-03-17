@@ -67,8 +67,12 @@ public class RemoveItemServlet extends HttpServlet {
             url = "VIEW_CART_PAGE";
         } catch (NamingException ex) {
             log("RemoveItemServlet Naming: " + ex.getCause());
+            request.setAttribute("OMNI_ERROR", ex.toString());
+
         } catch (SQLException ex) {
             log("RemoveItemServlet SQL: " + ex.getCause());
+            request.setAttribute("OMNI_ERROR", ex.toString());
+
         } catch (Exception ex) {
             log("SearchServlet Exception: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());

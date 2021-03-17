@@ -49,8 +49,12 @@ public class TagSearchServlet extends HttpServlet {
 
         } catch (SQLException ex) {
             log("SearchServlet SQL: " + ex.getCause());
+            request.setAttribute("OMNI_ERROR", ex.toString());
+
         } catch (NamingException ex) {
             log("SearchServlet Naming: " + ex.getCause());
+            request.setAttribute("OMNI_ERROR", ex.toString());
+
         } catch (Exception ex) {
             log("SearchServlet Exception: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
