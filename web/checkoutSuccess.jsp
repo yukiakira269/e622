@@ -54,6 +54,6 @@
             Empty order! There is nothing to account for!!!
         </c:if>
         <a href="SHOP_PAGE">Back to shopping page</a>
-
+        <a href="logout">Exit</a>
     </body>
 </html>

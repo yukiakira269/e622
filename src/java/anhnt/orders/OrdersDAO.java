@@ -6,9 +6,12 @@
 package anhnt.orders;
 
 import anhnt.ordersDetail.OrdersDetailDAO;
+import anhnt.tag.TagDTO;
 import anhnt.utilities.DBHelper;
 import java.io.Serializable;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.naming.NamingException;
@@ -48,6 +51,45 @@ public class OrdersDAO implements Serializable {
         }
 
         return 0;
+    }
+
+    private List<OrdersDTO> orderListAll;
+
+    public List<OrdersDTO> getOrderListAll()
+            throws NamingException, SQLException {
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        try {
+            //1. Establish connection
+            con = DBHelper.makeConnection();
+            if (con != null) {
+                orderListAll = new ArrayList<OrdersDTO>();
+                //2. Prepare sql string
+                String sql = "SELECT orderId, custName, custAddress, date "
+                        + "FROM Orders";
+                stm = con.prepareStatement(sql);
+                //3. Execute and store results
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    int orderId = rs.getInt(1);
+                    String custName = rs.getString(2);
+                    String custAddress = rs.getString(3);
+                    Date date = rs.getDate(4);
+                    OrdersDTO dto = new OrdersDTO(orderId, custName, custAddress, date);
+                    orderListAll.add(dto);
+                }
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+
+        return orderListAll;
     }
 
     public void createNewOrder(int orderId, String custName, String custAddress,
@@ -154,4 +196,5 @@ public class OrdersDAO implements Serializable {
         }
 
     }
+
 }

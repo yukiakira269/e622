@@ -34,16 +34,18 @@ public class LogOutServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-
             String url = "";
             Cookie[] cookies = request.getCookies();
-            for (int i = 0; i < cookies.length; i++) {
-                cookies[i].setMaxAge(0);
-                cookies[i].setValue("");
-                response.addCookie(cookies[i]);
+            if (cookies != null) {
+                for (int i = 0; i < cookies.length; i++) {
+                    cookies[i].setMaxAge(0);
+                    cookies[i].setValue("");
+                    response.addCookie(cookies[i]);
+                }
             }
             HttpSession session = request.getSession();
             if (session != null) {
+                //Clear all objects(attributes) relevant to the session
                 session.invalidate();
             }
             //Goes to AutoLogin Servlet

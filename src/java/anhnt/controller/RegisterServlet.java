@@ -57,7 +57,7 @@ public class RegisterServlet extends HttpServlet {
                     error.setPasswordLengthErr("!!! PASSWORD MUST BE BETWEEN 5"
                             + " AND 15 CHARACTERS");
                 }//end if password
-                if (!password.equals(confirm)) {
+                if (!password.equals(confirm) && !password.isBlank()) {
                     errorFound = true;
                     error.setConfirmNotMatchErr("!!! CONFIRMATION FAILED !!!");
                 }//end if !password
@@ -75,7 +75,7 @@ public class RegisterServlet extends HttpServlet {
                     boolean result = dao.registerAccount(userId, password, fullname, false);
                     if (result) {
                         url = "login";
-                    }//end if restul
+                    }//end if result
                 }
             }//end if userId is null
 
@@ -90,9 +90,9 @@ public class RegisterServlet extends HttpServlet {
                 request.setAttribute("ERROR", error);
             }
         } catch (NamingException ex) {
-            log("RegisterServlet Naming: " + ex.getCause());
+            log("RegisterServlet Naming: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
-
+            url = "error";
         } catch (Exception ex) {
             log("RegisterServlet Exception: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());

@@ -6,13 +6,26 @@ search=SearchServlet
 update=UpdateServlet
 delete=DeleteServlet
 error=ErrorServlet
+
 add=AddToCartServlet
-tagSearch=TagSearchServlet
 cart=CartServlet
 Remove=RemoveItemServlet
 ViewCart=ViewCartServlet
 checkout=CheckoutServlet
-LOGIN_PAGE     =login.html
+
+inventory=InventoryServlet
+bookSearch=TagSearchServlet
+updateBook=UpdateBookServlet
+addBook=AddBookServlet
+
+tag=TagServlet
+tagSearch=TagSearchServlet
+updateTag=UpdateTagServlet
+addTag=AddTagServlet
+deleteTag=DeleteTagServlet
+
+FIRST_LOGIN_PAGE=login.html
+LOGIN_PAGE     =login.jsp
 SEARCH_PAGE =search.jsp
 SHOP_PAGE=store.jsp
 REGISTER_PAGE =register.jsp
@@ -20,3 +33,9 @@ ERROR_PAGE=omniError.jsp
 VIEW_CART_PAGE=viewCart.jsp
 CHECK_OUT_PAGE=checkout.jsp
 CHECK_OUT_SUCCESS=checkoutSuccess.jsp
+MANAGE_SHOP_PAGE=manageStore.jsp
+MANAGE_TAG_PAGE=manageTag.jsp
+ADD_BOOK_PAGE=addBook.jsp
+ADD_TAG_PAGE=addTag.jsp
+VIEW_ORDERS_PAGE=viewOrders.jsp
+ORDER_DETAILS_PAGE=viewOrdersDetails.jsp

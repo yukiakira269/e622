@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -40,14 +41,20 @@ public class DeleteServlet extends HttpServlet {
             RegistrationDAO dao = new RegistrationDAO();
             dao.deleteAccount(userId);
             String lastValue = request.getParameter("txtLastSearchValue");
+
+            HttpSession session = request.getSession();
+            String fullname = (String) session.getAttribute("FULLNAME");
+
+            session.setAttribute("ADMIN_STATUS", dao.getstatus(fullname));
+
             urlRewrite = "search?txtSearch=" + lastValue;
 
         } catch (NamingException ex) {
-            log("DeleteServlet Naming: " + ex.getCause());
+            log("DeleteServlet Naming: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
 
         } catch (SQLException ex) {
-            log("DeleteServlet SQL: " + ex.getCause());
+            log("DeleteServlet SQL: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
 
         } catch (Exception ex) {

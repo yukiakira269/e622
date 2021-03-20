@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -37,7 +38,7 @@ public class AutoLogServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         int result = -1;
-        String url = "LOGIN_PAGE";
+        String url = "FIRST_LOGIN_PAGE";
         System.out.println("AUTOLOGGING");
         try {
             //1. Retrieve clients' cookies
@@ -56,10 +57,12 @@ public class AutoLogServlet extends HttpServlet {
                 RegistrationDAO dao = new RegistrationDAO();
                 result = dao.checkLogin(userId, password);
             }//end if Cookies
+            
             //If the account is an adminstrative account, forward to account search page
-
             if (result == 1) {
                 url = "SEARCH_PAGE";
+                HttpSession session = request.getSession();
+                session.setAttribute("ADMIN_STATUS", true);
             } //If the account is a normal user account, forward to the gallery page
             else if (result == 0) {
                 url = "SHOP_PAGE";
@@ -69,9 +72,9 @@ public class AutoLogServlet extends HttpServlet {
             //If the result is -1, meaning no account found,
             //forward to the login page by default
         } catch (NamingException ex) {
-            log("AutoLogServlet Naming: " + ex.getMessage());
+            log("AutoLogServlet Naming: " + ex.toString());
         } catch (SQLException ex) {
-            log("AutoLogServlet SQL:" + ex.getMessage());
+            log("AutoLogServlet SQL:" + ex.toString());
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);

@@ -66,17 +66,18 @@ public class AddToCartServlet extends HttpServlet {
             }
             //Recall the search function
             String lastSearch = request.getParameter("lastTagValue");
+            System.out.println(lastSearch);
             url = "tagSearch?txtTag=" + lastSearch;
         } catch (NamingException ex) {
-            log("LoginServlet Naming: " + ex.getCause());
+            log("AddToCartSerlvet Naming: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
 
         } catch (SQLException ex) {
-            log("LoginServlet SQL: " + ex.getCause());
+            log("AddToCartSerlvet SQL: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
 
         } catch (Exception ex) {
-            log("LoginServlet Exception: " + ex.toString());
+            log("AddToCartSerlvet Exception: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
         } finally {
             response.sendRedirect(url);

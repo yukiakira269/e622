@@ -39,24 +39,33 @@ public class TagSearchServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         String urlRewrite = "error";
         try {
+            request.setCharacterEncoding("UTF-8");
             String Description = request.getParameter("txtTag");
+            String txtAdmin = request.getParameter("txtAdmin");
             if (!Description.trim().isEmpty()) {
                 ProductDAO dao = new ProductDAO();
-                List<ProductDTO> bookList = dao.searchByTag(Description);
+                List<ProductDTO> bookList = dao.searchByTagAndDesc(Description);
                 request.setAttribute("TAG_SEARCH", bookList);
+            } else {
+                request.setAttribute("EMPTY_ERROR", "Note: Fill this box to look"
+                        + " for specific entry!");
             }
+
+            //Redirect to the correct page
             urlRewrite = "SHOP_PAGE?txtTag=" + Description;
-
+            if (txtAdmin != null) {
+                urlRewrite = "MANAGE_SHOP_PAGE?txtTag=" + Description;
+            }
         } catch (SQLException ex) {
-            log("SearchServlet SQL: " + ex.getCause());
+            log("TagSearchServlet SQL: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
-
+            
         } catch (NamingException ex) {
-            log("SearchServlet Naming: " + ex.getCause());
+            log("TagSearchServlet Naming: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
-
+            
         } catch (Exception ex) {
-            log("SearchServlet Exception: " + ex.toString());
+            log("TagSearchServlet Exception: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(urlRewrite);

@@ -86,6 +86,38 @@ public class RegistrationDAO implements Serializable {
         return fullname;
     }
 
+    public boolean getstatus(String fullName)
+            throws NamingException, SQLException {
+        boolean status = false;
+        Connection con = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        try {
+            //1. Establish connection
+            con = DBHelper.makeConnection();
+            if (con != null) {
+                //2. Prepare SQL String
+                String sql = "SELECT isAdmin FROM Registration WHERE fullname LIKE ?";
+                stm = con.prepareStatement(sql);
+                stm.setString(1, fullName);
+                //3. Execute and store in result set
+                rs = stm.executeQuery();
+                if (rs.next()) {
+                    status = rs.getBoolean(1);
+                }
+            }
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return status;
+
+    }
+
     public int checkLogin(String userId, String password)
             throws NamingException, SQLException {
         Connection con = null;

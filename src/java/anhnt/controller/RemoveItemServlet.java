@@ -66,20 +66,20 @@ public class RemoveItemServlet extends HttpServlet {
             }//end if session
             url = "VIEW_CART_PAGE";
         } catch (NamingException ex) {
-            log("RemoveItemServlet Naming: " + ex.getCause());
+            log("RemoveItemServlet Naming: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
 
         } catch (SQLException ex) {
-            log("RemoveItemServlet SQL: " + ex.getCause());
+            log("RemoveItemServlet SQL: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
 
         } catch (Exception ex) {
             log("SearchServlet Exception: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
         } finally {
-//            RequestDispatcher rd = request.getRequestDispatcher(url);
-//            rd.forward(request, response);
-            response.sendRedirect(url);
+            RequestDispatcher rd = request.getRequestDispatcher(url);
+            rd.forward(request, response);
+//            response.sendRedirect(url);
             out.close();
         }
     }

@@ -14,14 +14,14 @@ import java.io.Serializable;
 public class TagDTO implements Serializable{
     
     private int tagId;
-    private String Description;
+    private String description;
 
     public TagDTO() {
     }
 
     public TagDTO(int tagId, String Description) {
         this.tagId = tagId;
-        this.Description = Description;
+        this.description = Description;
     }
 
     /**
@@ -42,14 +42,14 @@ public class TagDTO implements Serializable{
      * @return the Description
      */
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     /**
      * @param Description the Description to set
      */
     public void setDescription(String Description) {
-        this.Description = Description;
+        this.description = Description;
     }
     
     

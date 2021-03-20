@@ -51,7 +51,7 @@ public class CartServlet extends HttpServlet {
                 url = "checkout";
             }
         } catch (NullPointerException ex) {
-            log("LoginServlet NullPonter: " + ex.toString());
+            log("CartServlet NullPonter: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);

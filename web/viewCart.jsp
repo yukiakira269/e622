@@ -15,6 +15,12 @@
 
     </head>
     <body>
+        <header>
+            <nav>
+                <a href="SHOP_PAGE">Back to shopping page</a>
+                <a href="logout">Log out</a>
+            </nav>
+        </header>
         <c:set var="cart" value="${sessionScope.CART}"/>
         <c:set var="keySet" value="${sessionScope.KEY_SET}" />
         <jsp:useBean id="dao" class="anhnt.product.ProductDAO" scope="session"/>
@@ -61,7 +67,6 @@
     <c:if test="${empty keySet}">
         <h1>The cart is currently empty!!!</h1>
     </c:if>
-    <a href="SHOP_PAGE">Back to shopping page</a>
 
 
 </body>

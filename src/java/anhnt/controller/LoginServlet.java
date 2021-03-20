@@ -40,39 +40,52 @@ public class LoginServlet extends HttpServlet {
         String url = "LOGIN_PAGE";
         HttpSession session = request.getSession();
         try {
+            request.setCharacterEncoding("UTF-8");
             String userId = request.getParameter("txtUsername");
             String password = request.getParameter("txtPassword");
+            System.out.println(password);
             //If the client chooses to remember password
             String sAutoLogin = request.getParameter("checkRemember");
             //Execute only if the userId and password is not null
-            if (userId != null && password != null) {
+            if (!userId.trim().isEmpty() && !password.trim().isEmpty()) {
+                //If remember password is checked
                 if (sAutoLogin != null) {
                     Cookie cookie = new Cookie(userId, password);
                     cookie.setMaxAge(60 * 5);
                     response.addCookie(cookie);
-                }
+                }//end if sAuto
                 RegistrationDAO dao = new RegistrationDAO();
                 int result = dao.checkLogin(userId, password);
                 //Session scope to use the information in succesive requests
-                String fullname = dao.getFullname(userId);
-                session.setAttribute("FULLNAME", fullname);
-                //If the account is an adminstrative account, forward to account search page
-                if (result == 1) {
-                    url = "SEARCH_PAGE";
-                } //If the account is a normal user account, forward to the gallery page
-                else if (result == 0) {
-                    url = "SHOP_PAGE";
+                if (result > -1) {
+                    String fullname = dao.getFullname(userId);
+                    session.setAttribute("FULLNAME", fullname);
+                    //If the account is an adminstrative account, forward to account search page
+                    if (result == 1) {
+                        url = "SEARCH_PAGE";
+                        session.setAttribute("ADMIN_STATUS", true);
+                    } //If the account is a normal user account, forward to the gallery page
+                    else if (result == 0) {
+                        url = "SHOP_PAGE";
+                    }
+                }//end if result
+                else {
+                    request.setAttribute("ERROR", "No account found! Please try again");
                 }
                 //If the result is -1, meaning no account found, forward to the login page by default
             }//end if userId null
-
+            else {
+                request.setAttribute("ERROR", "Username and password must not be empty");
+            }
         } catch (NamingException ex) {
-            log("LoginServlet Naming: " + ex.getCause());
+            log("LoginServlet Naming: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
+            url = "error";
 
         } catch (SQLException ex) {
-            log("LoginServlet SQL: " + ex.getCause());
+            log("LoginServlet SQL: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
+            url = "error";
 
         } catch (Exception ex) {
             log("LoginServlet UnknownException: " + ex.toString());

@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -36,6 +37,7 @@ public class UpdateServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         String urlRewrite = "error";
+        HttpSession session = request.getSession();
         try {
             String userId = request.getParameter("txtUserId");
             String password = request.getParameter("txtPassword");
@@ -50,23 +52,27 @@ public class UpdateServlet extends HttpServlet {
                 if (sIsAdmin != null) {
                     isAdmin = true;
                 }
+
                 //Check for password length error, synchronous with the RegisterServlet
                 if (password.trim().length() < 5 || password.trim().length() > 15) {
-                    String passwordLengthError = "PASSWORD LENGTH EXCEEDED! "
+                    String passwordLengthError = "PASSWORD LENGTH VIOLATED! "
                             + "MUST BE BETWEEN 5 AND 15 CHARACTERS";
                     request.setAttribute("PASS_LENGTH_ERR", passwordLengthError);
 
                 } else {
                     //if no error is found, update the account
                     dao.updateAccount(userId, password, isAdmin);
+                    //Update the status of the current account if changed (if any)
+                    session.setAttribute("ADMIN_STATUS", dao.getstatus(
+                            (String) session.getAttribute("FULLNAME")));
                 }
             }//end if userId 
         } catch (SQLException ex) {
-            log("UpdateServlet SQL: " + ex.getCause());
+            log("UpdateServlet SQL: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
 
         } catch (NamingException ex) {
-            log("UpdateServlet Naming: " + ex.getCause());
+            log("UpdateServlet Naming: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
 
         } catch (Exception ex) {

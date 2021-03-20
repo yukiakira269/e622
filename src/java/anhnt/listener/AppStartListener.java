@@ -7,12 +7,11 @@ package anhnt.listener;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -53,16 +52,41 @@ public class AppStartListener implements ServletContextListener {
                 dirMap = new HashMap<String, String>();
                 while (sc.hasNextLine()) {
                     line = sc.nextLine();
-                    action = line.substring(0, line.lastIndexOf("="));
-                    resource = line.substring(line.lastIndexOf("=") + 1);
-                    dirMap.put(action.trim(), resource.trim());
+                    if (!line.isEmpty()) {
+                        action = line.substring(0, line.lastIndexOf("="));
+                        resource = line.substring(line.lastIndexOf("=") + 1);
+                        dirMap.put(action.trim(), resource.trim());
+                    }//end if line
                 }//end while sc
             }//end if sc
-
             ctx.setAttribute("DIRMAP", dirMap);
+
+            //Handle file uploading
+            //Return the path of the server
+//            String rootPath = System.getProperty("catalina.home");
+            //Return the path relative to the Project's folder?
+            String rootPath = ctx.getRealPath("");
+            String relativePath = ctx.getInitParameter("ImageFolder");
+//            File file = new File(rootPath + File.separator + ".." + File.separator + ".." + File.separator + relativePath);
+            File file = new File(rootPath + File.separator + relativePath);
+            File backup = new File(rootPath + File.separator + ".." + File.separator + ".." + File.separator + "web" + File.separator + relativePath);
+            System.out.println(backup.getAbsolutePath());
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+            ctx.setAttribute("DIR_FILE", file);
+            ctx.setAttribute("BAK_FILE", backup);
+
         } finally {
             if (sc != null) {
                 sc.close();
+            }
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException ex) {
+                    ctx.log("AppStartListner IOException: " + ex.getMessage());
+                }
             }
         }
 

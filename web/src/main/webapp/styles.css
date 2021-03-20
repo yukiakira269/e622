@@ -1,13 +1,30 @@
 *{
+    box-sizing: border-box;
     text-align: center;
     font-family: "Times New Roman", sans-serif,serif,cursive;
     color: #E9F2FA;
     background-color: #012E57;
+    margin: 1%;
+}
+
+nav{
+    width:100%;
+    text-align: left;
+    background-color: #020F23;
+}
+
+nav a{
+    background-color: #020F23;
 }
 
 img{
-    width: 300px;
-    height:300px;
+    width: 100px;
+    height: 100px;
+}
+
+table{
+    margin-left: auto;
+    margin-right: auto;
 }
 
 a {
@@ -16,6 +33,13 @@ a {
 a:hover{
     color: #CDF2FA;
 }
-input:hover{
+
+
+input{
+    border: solid 1px;
+    border-radius: 3px;
+}
+
+input[type=submit]:hover{
     cursor: pointer;
 }

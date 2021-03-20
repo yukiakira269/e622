@@ -43,23 +43,26 @@ public class SearchServlet extends HttpServlet {
         String url = "error";
         try {
             //1. Obtain search String
+            request.setCharacterEncoding("UTF-8");
             String searchValue = request.getParameter("txtSearch");
             //2. Check if the search String has useful values
             if (!searchValue.trim().isEmpty()) {
                 RegistrationDAO dao = new RegistrationDAO();
                 accountList = dao.searchAccount(searchValue);
                 request.setAttribute("SEARCH_RESULT", accountList);
+            } else {
+                request.setAttribute("EMPTY_ERROR", "Please provide data to search");
             }
             url = "SEARCH_PAGE";
         } catch (SQLException ex) {
-            log("SearchServlet SQL: " + ex.getCause());
+            log("SearchServlet SQL: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
 
         } catch (NamingException ex) {
-            log("SearchServlet Naming: " + ex.getCause());
+            log("SearchServlet Naming: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
 
-        } catch (Exception ex) {
+        } catch (NullPointerException ex) {
             log("SearchServlet Exception: " + ex.toString());
             request.setAttribute("OMNI_ERROR", ex.toString());
         } finally {

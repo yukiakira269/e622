@@ -15,8 +15,6 @@
 
     </head>
     <body>
-        <jsp:useBean id="registration" class="anhnt.registration.RegistrationDAO"
-                     scope="session"/>
         <!--Retrieve username from the Request object's parameter-->
         <h1>Welcome ${sessionScope.FULLNAME}</h1>
 
@@ -27,27 +25,40 @@
         </form>
         <form action="cart">
             <input type="submit" value="View Cart" name="btAction"/>
+            <a href="logout">Log out</a><br />
         </form>
-        <a href="logout">Log out</a>
-
+        <font style="color:red;">
+        <c:if test="${not empty requestScope.EMPTY_ERROR}">
+            ${requestScope.EMPTY_ERROR}
+        </c:if>
+        
+        </font>
         <jsp:useBean id="product" class="anhnt.product.ProductDAO" 
                      scope="session"/>
-        <c:set var="searchTag" value="${param.txtTag}"/>
         <jsp:useBean id="tag" class="anhnt.tag.TagDAO" scope="session"/>
+        <c:set var="searchTag" value="${param.txtTag}"/>
+
         <c:if test="${empty searchTag}">
             <table border="1">
                 <thead>
+                    <tr>
+                        <th colspan="7" style="text-align: center; 
+                            font-weight: bold; color: red">
+                            BEST SELLERS
+                        </th>
+                    </tr>
                     <tr>
                         <th>No.</th>
                             <c:forEach items="${product.columnNames}" var="columnName">
                             <th>${columnName}</th>
                             </c:forEach>
+                        <th>Image</th>
                         <th>Add to Cart</th>
                     </tr>
                 </thead>
                 <tbody>
 
-                    <c:forEach items="${product.bookList}" var="book" varStatus="counter">
+                    <c:forEach items="${product.bestList}" var="book" varStatus="counter">
                         <!--Each form is a row, a user can 
                         add individual books per addition--> 
 
@@ -69,7 +80,9 @@
                                     AVAILABLE
                                 </c:if>
                                 <c:if test="${book.storeQuantity eq 0}">
-                                    <font color="red">OUT OF STOCK</font
+                                    <font style="color: red;">
+                                    OUT OF STOCK
+                                    </font>
                                 </c:if>
                                 <input type="hidden" name="txtStoreQuantity"
                                        value="${book.storeQuantity}"/>
@@ -82,6 +95,10 @@
                                 ${book.productDesc}
                             </td>
                             <td>
+                                <img src="./src/main/webapp/books/${book.productId}.png"
+                                     alt="thumbnail"/>
+                            </td>
+                            <td>
                                 <input type="hidden" name="lastTagValue" 
                                        value="${searchTag}" />
                                 <input type="submit" value="Add To Cart" 
@@ -90,12 +107,7 @@
                         </tr>
                     </form>
                 </c:forEach>
-                <tr>
-                    <td colspan="6" style="text-align: center; 
-                        font-weight: bold; color: red">
-                        BEST SELLERS
-                    </td>
-                </tr>
+
             </tbody>
         </table>
     </c:if>
@@ -109,6 +121,8 @@
                             <c:forEach items="${product.columnNames}" var="columnName">
                             <th>${columnName}</th>
                             </c:forEach>
+                        <th>Image</th>
+
                         <th>Add to Cart</th>
                     </tr>
                 </thead>
@@ -132,7 +146,7 @@
                                 <c:if test="${book.storeQuantity gt 0}">
                                     AVAILABLE
                                 </c:if>
-                                <c:if test="${book.storeQuantity lt 0}">
+                                <c:if test="${book.storeQuantity eq 0}">
                                     <font color="red">OUT OF STOCK</font>
                                 </c:if>
                                 <input type="hidden" name="txtStoreQuantity"
@@ -144,6 +158,10 @@
                             </td>
                             <td>
                                 ${book.productDesc}
+                            </td>
+                            <td>
+                                <img src="./src/main/webapp/books/${book.productId}.png"
+                                     alt="thumbnail"/>
                             </td>
                             <td>
                                 <input type="hidden" name="lastTagValue" 
@@ -159,7 +177,7 @@
         </table>
     </c:if>
     <c:if test="${empty requestScope.TAG_SEARCH}">
-        <h2>Category not found!</h2>
+        <h2>No matching records found!</h2>
     </c:if>
 </c:if>
 </body>
