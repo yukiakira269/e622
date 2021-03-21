@@ -85,7 +85,6 @@ public class AddBookServlet extends HttpServlet {
                 //Upload directory
                 ServletContext ctx = this.getServletContext();
                 File uploadDir = (File) ctx.getAttribute("DIR_FILE");
-                File backupDir = (File) ctx.getAttribute("BAK_FILE");
 
                 System.out.println("UPLOAD DIR:" + uploadDir);
                 //Retrieve the file sent in parts from the jsp page
@@ -97,26 +96,34 @@ public class AddBookServlet extends HttpServlet {
                 /*Set up a new File object to represent the uploading directory 
                     (File can represent both files or pathnames)*/
                 File uploads = new File(uploadDir.getAbsolutePath());
-                File bakUploads = new File(backupDir.getAbsolutePath());
                 //Create a new File Object with the given name to contain the incoming data
                 File f = new File(fileName);
                 //Combine the pathname and the new file's name into one unified File instance
                 File file = new File(uploads, f.getName());
-                File backupFile = new File(bakUploads, f.getName());
                 //Retrieve inputStream from the obtained data parts
                 InputStream input = filePart.getInputStream();
-                InputStream backupInput = filePart.getInputStream();
 
                 //Copy all bytes from the input stream to the specified file (path)
                 try {
                     Files.copy(input, file.toPath());
                     System.out.println("COPY1");
-                    Files.copy(backupInput, backupFile.toPath());
-                    System.out.println("COPY2");
+
                 } finally {
                     //Close the input stream
                     input.close();
-                    backupInput.close();
+                }
+                //Runing directly with NetBean
+                File backupDir = (File) ctx.getAttribute("BAK_FILE");
+                if (backupDir != null) {
+                    File bakUploads = new File(backupDir.getAbsolutePath());
+                    File backupFile = new File(bakUploads, f.getName());
+                    InputStream backupInput = filePart.getInputStream();
+                    try {
+                        Files.copy(backupInput, backupFile.toPath());
+                        System.out.println("COPY2");
+                    } finally {
+                        backupInput.close();
+                    }
                 }
 
             }//end if sProduct
@@ -134,7 +141,6 @@ public class AddBookServlet extends HttpServlet {
             //Else errors happen, refresh the page with the errors printed
 
         } catch (SQLException ex) {
-            ex.printStackTrace();
             String errorMsg = ex.getMessage();
             if (errorMsg.contains("conflicted")) {
                 String err = "TAG ID NOT FOUND! PLEASE REFER TO THE TAG LIST";

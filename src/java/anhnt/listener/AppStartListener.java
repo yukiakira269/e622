@@ -67,15 +67,21 @@ public class AppStartListener implements ServletContextListener {
             //Return the path relative to the Project's folder?
             String rootPath = ctx.getRealPath("");
             String relativePath = ctx.getInitParameter("ImageFolder");
+            System.out.println(rootPath);
 //            File file = new File(rootPath + File.separator + ".." + File.separator + ".." + File.separator + relativePath);
             File file = new File(rootPath + File.separator + relativePath);
-            File backup = new File(rootPath + File.separator + ".." + File.separator + ".." + File.separator + "web" + File.separator + relativePath);
-            System.out.println(backup.getAbsolutePath());
+            //Configure to run directly from the Project's folder with NetBeans
+            if (rootPath.contains("build")) {
+                File backup = new File(rootPath + File.separator + ".." + File.separator + ".." + File.separator + "web" + File.separator + relativePath);
+                if (!backup.exists()) {
+                    backup.mkdirs();
+                }//end if !backup
+                ctx.setAttribute("BAK_FILE", backup);
+            }//end if rootPath
             if (!file.exists()) {
                 file.mkdirs();
-            }
+            }//end if !file
             ctx.setAttribute("DIR_FILE", file);
-            ctx.setAttribute("BAK_FILE", backup);
 
         } finally {
             if (sc != null) {

@@ -3,7 +3,7 @@
     <Resource
         name="DBCon" auth="Container" type="javax.sql.DataSource"
         driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
-        url="jdbc:sqlserver://localhost:1433;databaseName=e622;instanceName=SQLExpress2019"
+        url="jdbc:sqlserver://localhost:1433;databaseName=AnhNTDatabase;instanceName=SQLExpress2019"
         username="sa" password="123456"
     />
 </Context>
