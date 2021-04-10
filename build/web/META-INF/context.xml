@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Context path="/AssignmentAnhnt" allowCasualMultipartParsing="true">
-    <Resource
-        name="DBCon" auth="Container" type="javax.sql.DataSource"
-        driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
-        url="jdbc:sqlserver://localhost:1433;databaseName=AnhNTDatabase;instanceName=SQLExpress2019"
-        username="sa" password="123456"
-    />
-</Context>
